@@ -39,6 +39,14 @@ Each command (and each state) has its own **CALLBACK** method. Within this metho
 ### Remarks
 I use this project for driving own sensors remotely.
 
+Everything was coded using:
+
+  - [**atom**](https://atom.io/) editor,
+  - [**arduino Makefile**](https://github.com/sudar/Arduino-Makefile),
+  - [**Gnome**](https://www.gnome.org/) windows manager,
+  - and [**debian**](https://www.debian.org/) GNU/Linux.
+
+
 ## ChangeLog
 
 **20200330**
