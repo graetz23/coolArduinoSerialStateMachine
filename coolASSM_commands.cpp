@@ -4,7 +4,7 @@
  * Christian
  * graetz23@gmail.com
  * created 20190511
- * updated 20200329
+ * updated 20200330
  * version 0.5
  */
 
@@ -21,60 +21,66 @@ String ASSM_HELPER::command_to_String( uint8_t command ) {
   switch( command ) {
 
     case ASSM_CMD_NULL :
-	str = ASSM_CMD_NULL_STR;
-	break;
+	     str = ASSM_CMD_NULL_STR;
+	  break;
 
     case ASSM_CMD_SNA :
-	str = ASSM_CMD_SNA_STR;
-	break;
+	     str = ASSM_CMD_SNA_STR;
+	   break;
 
     case ASSM_CMD_PING :
- 	str = ASSM_CMD_PING_STR;
- 	break;
+ 	     str = ASSM_CMD_PING_STR;
+ 	   break;
     case ASSM_CMD_PONG :
- 	str = ASSM_CMD_PONG_STR;
- 	break;
+ 	     str = ASSM_CMD_PONG_STR;
+ 	   break;
 
     case ASSM_CMD_AKNWLDG :
- 	str = ASSM_CMD_AKNWLDG_STR;
- 	break;
+ 	     str = ASSM_CMD_AKNWLDG_STR;
+ 	  break;
 
     case ASSM_CMD_RUN :
- 	str = ASSM_CMD_RUN_STR;
- 	break;
+ 	    str = ASSM_CMD_RUN_STR;
+ 	  break;
+
     case ASSM_CMD_WAIT :
- 	str = ASSM_CMD_WAIT_STR;
- 	break;
+ 	    str = ASSM_CMD_WAIT_STR;
+ 	   break;
+
     case ASSM_CMD_EVENT :
- 	str = ASSM_CMD_EVENT_STR;
-    	break;
+ 	    str = ASSM_CMD_EVENT_STR;
+    break;
+
     case ASSM_CMD_DONE :
- 	str = ASSM_CMD_DONE_STR;
- 	break;
+ 	    str = ASSM_CMD_DONE_STR;
+ 	  break;
+
     case ASSM_CMD_STOP :
- 	str = ASSM_CMD_STOP_STR;
-	break;
+ 	    str = ASSM_CMD_STOP_STR;
+	  break;
 
     case ASSM_CMD_STATUS :
- 	str = ASSM_CMD_STATUS_STR;
- 	break;
+ 	    str = ASSM_CMD_STATUS_STR;
+ 	   break;
 
     case ASSM_CMD_CONNECT :
- 	str = ASSM_CMD_CONNECT_STR;
- 	break;
+ 	    str = ASSM_CMD_CONNECT_STR;
+ 	  break;
+
     case ASSM_CMD_DISCNCT :
- 	str = ASSM_CMD_DISCNCT_STR;
- 	break;
+ 	    str = ASSM_CMD_DISCNCT_STR;
+ 	  break;
 
     case ASSM_CMD_EXAMPLE :
- 	str = ASSM_CMD_EXAMPLE_STR;
- 	break;
+ 	    str = ASSM_CMD_EXAMPLE_STR;
+ 	  break;
+
     // if COMMAND is unkown, show the given COMMAND as a number
     default :
-	char cstr[12];
-	sprintf(cstr, "%d", command);
-	str = String(cstr);
-	break;
+	    char cstr[12];
+	    sprintf(cstr, "%d", command);
+	    str = String(cstr);
+	  break;
   } // switch
   return str;
 } // method

@@ -4,7 +4,7 @@
  * Christian
  * graetz23@gmail.com
  * created 20190511
- * updated 20200329
+ * updated 20200330
  * version 0.5
  */
 #ifndef __ARDUINO_COOLASSM_HELPER_H__

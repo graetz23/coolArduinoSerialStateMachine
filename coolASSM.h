@@ -4,7 +4,7 @@
  * Christian
  * graetz23@gmail.com
  * created 20190511
- * updated 20200329
+ * updated 20200330
  * version 0.5
  */
 #ifndef __ARDUINO_COOLASSM_H__
@@ -14,7 +14,8 @@
 #include <Wire.h>
 #include <SPI.h>
 
-#include "./coolASSM_commands.h" // the ASSM commands and converts ..
+// #include "./coolASSM_commands.h" // the ASSM commands and converts ..
+#include "./coolASSM_callbacks.h" // the ASSM callback methods ..
 
 #define SERIAL_BAUD                         9600  // Baudrate
 // #define SERIAL_BAUD                      19200  // Baudrate
@@ -41,6 +42,8 @@ private:
   uint8_t _state; // current state of cool ASSM
 
   ASSM_HELPER* _helper; // COMMAND and STATE processing helper
+
+  ASSM_CALLBACK* _callback; // base pointer to your overloaded class
 
 public:
 

@@ -4,7 +4,7 @@
  * Christian
  * graetz23@gmail.com
  * created 20190511
- * updated 20200329
+ * updated 20200330
  * version 0.5
  */
 #include <Arduino.h>
@@ -16,9 +16,11 @@ ASSM::ASSM( void ) {
   _state = ASSM_STATE_IDLE; // initial STATE is IDLE due to not reacting
   _command = ASSM_CMD_NULL; // set COMMAND to NO (NULL) COMMAND
   _helper = new ASSM_HELPER( ); // use internal helper ..
+  _callback = new ASSM_CALLBACK( ); // TODO put your overloaded class here ..
 } // method
 
 ASSM::~ASSM( void ) {
+  delete _callback;
   delete _helper;
 } // method
 
@@ -267,10 +269,10 @@ uint8_t ASSM::process_command( uint8_t command ) {
         debug_command = ASSM_CMD_DISCNCT;
     break;
     // process no (NULL) or an unknown COMMAND
-    default:
+    default: // NULL command
       state = _state; // next STATE is the same as last STATE ..
       if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL ) {
-        display( "CMND DEFAULT" );
+        display( "CMND NULL" );
         delay(ASSM_DEBUG_DISPLAY_SHOW);
         display( "" );
         delay(ASSM_DEBUG_DISPLAY_BLANK);
@@ -298,16 +300,18 @@ uint8_t ASSM::process_state( uint8_t state ) {
   switch( _state ) {
     case ASSM_STATE_ERROR: // SNA - State Not Available
       next_command = ASSM_CMD_NULL;
+      _callback->error( _command );
       if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
         debug_state = ASSM_STATE_ERROR;
       break;
     case ASSM_STATE_IDLE: // IDLE around, and around, and arountthe world
       next_command = ASSM_CMD_NULL;
+      _callback->idle( _command );
       if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
         debug_state = ASSM_STATE_IDLE;
     break;
     case ASSM_STATE_RUNNING: // RUNNING
-
+      _callback->running( _command );
       if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
         debug_state = ASSM_STATE_RUNNING;
       next_command = process( _command ); // use internal member here
