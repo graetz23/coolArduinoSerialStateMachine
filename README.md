@@ -12,6 +12,7 @@ For building the HEX file, the [arduino makefile](https://github.com) is used. S
 
 ### Usage
 The **commands** are:
+
   0. NULL - the null command is driven by the state machine itself,
   1. SNA - State not available; this is the error message that leads to ERROR state,
   2. PING - send to request a PONG and to go to IDLE state,
@@ -27,6 +28,7 @@ The **commands** are:
   22. DISCNCT - may be used to release an established connection.
 
 The **STATES** are:
+
   0. ERROR - the machine go or should go to this state in case of an error,
   1. IDLE - the machine is idling and waiting for commands,
   2. PROCESSING - the machine processes its tasks.
