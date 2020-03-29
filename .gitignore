@@ -1,3 +1,9 @@
+# Temporary
+*.swp
+
+# arduino Makefile
+build-*
+
 # Prerequisites
 *.d
 

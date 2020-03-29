@@ -1,0 +1,31 @@
+#######################################
+# Syntax Coloring Map For coolASSM
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+ASSM			KEYWORD1
+State			KEYWORD1
+Command			KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+process			KEYWORD2
+readCommand		KEYWORD2  
+writeCommand		KEYWORD2  
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+assm	 		KEYWORD2
+coolASSM 		KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
