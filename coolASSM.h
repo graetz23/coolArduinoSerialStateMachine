@@ -14,8 +14,7 @@
 #include <Wire.h>
 #include <SPI.h>
 
-// #include "./coolASSM_commands.h" // the ASSM commands and converts ..
-#include "./coolASSM_callbacks.h" // the ASSM callback methods ..
+#include "./coolASSM_commands.h" // the ASSM commands and converts ..
 
 #define SERIAL_BAUD                         9600  // Baudrate
 // #define SERIAL_BAUD                      19200  // Baudrate
@@ -43,8 +42,6 @@ private:
 
   ASSM_HELPER* _helper; // COMMAND and STATE processing helper
 
-  ASSM_CALLBACK* _callback; // base pointer to your overloaded class
-
 public:
 
   /*!
@@ -56,6 +53,21 @@ public:
    * \brief Destructor
    */
   ~ASSM( void );
+
+  /*!
+   * \brief cyclic called when coolASSM is in ERROR state - overload method
+   */
+  virtual uint8_t error( uint8_t command );
+
+  /*!
+   * \brief cyclic called when coolASSM is in IDLE state - overload method
+   */
+  virtual uint8_t idle( uint8_t command );
+
+  /*!
+   * \brief cyclic called when coolASSM is in RUNNING state - overload method
+   */
+  virtual uint8_t running( uint8_t command );
 
   /*!
    * \brief Returns the HELPER for using it outside cool ASSM ..

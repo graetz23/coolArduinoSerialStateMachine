@@ -16,11 +16,9 @@ ASSM::ASSM( void ) {
   _state = ASSM_STATE_IDLE; // initial STATE is IDLE due to not reacting
   _command = ASSM_CMD_NULL; // set COMMAND to NO (NULL) COMMAND
   _helper = new ASSM_HELPER( ); // use internal helper ..
-  _callback = new ASSM_CALLBACK( ); // TODO put your overloaded class here ..
 } // method
 
 ASSM::~ASSM( void ) {
-  delete _callback;
   delete _helper;
 } // method
 
@@ -49,7 +47,7 @@ void ASSM::welcome( ) {
 } // method
 
 void ASSM::ready( ) {
-  // prin some ready messsafe to display here
+  // print some ready messsafe to display here
   delay(750); // 500 ms
 } // method
 
@@ -71,7 +69,6 @@ void ASSM::writeCommand( String command ) {
   Serial.write( cstr );
 } // method
 
-
 void ASSM::writeState( uint8_t state ) {
  writeState( _helper->state_to_String( state ) );
 } // method
@@ -81,7 +78,6 @@ void ASSM::writeState( String state ) {
   const char* cstr = str.c_str( );
   Serial.write( cstr );
 } // method
-
 
 // read the received State from serial
 uint8_t ASSM::readCommand( ) {
@@ -300,21 +296,21 @@ uint8_t ASSM::process_state( uint8_t state ) {
   switch( _state ) {
     case ASSM_STATE_ERROR: // SNA - State Not Available
       next_command = ASSM_CMD_NULL;
-      _callback->error( _command );
+      next_command = error( _command );
       if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
         debug_state = ASSM_STATE_ERROR;
       break;
     case ASSM_STATE_IDLE: // IDLE around, and around, and arountthe world
       next_command = ASSM_CMD_NULL;
-      _callback->idle( _command );
+      next_command = idle( _command );
       if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
         debug_state = ASSM_STATE_IDLE;
     break;
     case ASSM_STATE_RUNNING: // RUNNING
-      _callback->running( _command );
+      next_command = ASSM_CMD_NULL;
+      next_command = running( _command );
       if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
         debug_state = ASSM_STATE_RUNNING;
-      next_command = process( _command ); // use internal member here
       // next_command = ASSM_CMD_NULL;
     break;
     default:
@@ -351,10 +347,30 @@ int ASSM::a2i(const char *s)
   return num*sign;
 } // method
 
-uint8_t ASSM::process( uint8_t command ) {
+// here you can add your code or
+// overload the class and next the methods
 
-  uint8_t next_command = ASSM_CMD_NULL;
+uint8_t ASSM::error( uint8_t command ) {
 
+  uint8_t next_command = ASSM_CMD_NULL; // do nothing else
+
+  return next_command;
+
+} // method
+
+uint8_t ASSM::idle( uint8_t command ) {
+
+  uint8_t next_command = ASSM_CMD_NULL; // do nothing else
+
+  return next_command;
+
+} // method
+
+uint8_t ASSM::running( uint8_t command ) {
+
+  uint8_t next_command = ASSM_CMD_NULL; // do nothing else
+
+  /// some easy example for a fake sensor / data Processing
   if( ASSM_DEBUG_SHOW_RUNNING_INTERNAL ) {
     display( "RUNNING ->" );
     delay(ASSM_DEBUG_DISPLAY_SHOW);
@@ -366,26 +382,28 @@ uint8_t ASSM::process( uint8_t command ) {
     delay(ASSM_DEBUG_DISPLAY_BLANK);
   } // if
 
-  // TODO implement your running here
-
+  // if arduino is in runnig state and client sends
+  // EVENT as command, arduino responds with three
+  // WAIT commands to simulate a sensor requesting
   if( command == ASSM_CMD_EVENT ) {
 
     int cnt = 0;
     while( cnt < 3 ) {
-
+      // write a <WAIT> command
       writeCommand( ASSM_CMD_WAIT );
-
       cnt++;
-      delay( 1000 );
+      delay( 1000 ); // wait a second
     } // loop
 
+    // afterwards arduino responds with an UNIQUE
+    // command, writes the data back to the client by:
+    // <DATA>1;2;3;4;5;6;7;8;9;0</DATA>
     writeCommand( "DATA" );
-
-    writeData( "1;2;3;4;5;6;7;8;9;0;" );
-
+    writeData( "1;2;3;4;5;6;7;8;9;0" );
     writeCommand( "/DATA" );
 
-    writeCommand( ASSM_CMD_STOP );
+    // at the end arduino sends a DONE command
+    writeCommand( ASSM_CMD_DONE );
 
   } // if
 
