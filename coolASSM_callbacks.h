@@ -29,17 +29,17 @@ public:
   /*!
    * \brief cyclic called when coolASSM is in ERROR state - overload method
    */
-  virtual void error( uint8_t command );
+  virtual uint8_t error( uint8_t command );
 
   /*!
    * \brief cyclic called when coolASSM is in IDLE state - overload method
    */
-  virtual void idle( uint8_t command );
+  virtual uint8_t idle( uint8_t command );
 
   /*!
    * \brief cyclic called when coolASSM is in RUNNING state - overload method
    */
-  virtual void running( uint8_t command );
+  virtual uint8_t running( uint8_t command );
 
 }; // class
 

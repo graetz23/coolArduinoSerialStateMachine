@@ -16,11 +16,26 @@ ASSM_CALLBACK::ASSM_CALLBACK( void ) {
 ASSM_CALLBACK::~ASSM_CALLBACK( void ) {
 } // method
 
-void ASSM_CALLBACK::error( uint8_t command ) {
+uint8_t ASSM_CALLBACK::error( uint8_t command ) {
+
+  uint8_t next_command = ASSM_CMD_NULL; // do nothing else
+
+  return next_command;
+
 } // method
 
-void ASSM_CALLBACK::idle( uint8_t command ) {
+uint8_t ASSM_CALLBACK::idle( uint8_t command ) {
+
+  uint8_t next_command = ASSM_CMD_NULL; // do nothing else
+
+  return next_command;
+
 } // method
 
-void ASSM_CALLBACK::running( uint8_t command ) {
+uint8_t ASSM_CALLBACK::running( uint8_t command ) {
+
+  uint8_t next_command = ASSM_CMD_NULL; // do nothing else
+
+  return next_command;
+
 } // method

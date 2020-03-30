@@ -33,7 +33,7 @@ void loop( ) {
 
   assm.loop( ); // processing loop of ASSM; it's not a while one ..
 
-  digitalWrite(4, LOW);  // sets the digital pin LED off
+  digitalWrite(LED, LOW);  // sets the digital pin LED off
 
   delay(100);
 
