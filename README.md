@@ -49,6 +49,11 @@ Everything was coded using:
 
 ## ChangeLog
 
+**20200331**
+  - reset the _public_ and _private_ methods,
+  - renamed files to _coolASSM_config.*_,
+  - adding MIT License to all files.
+
 **20200330**
   - adding class ASSM_CALLBACK for having virtual methods to be overloaded
 

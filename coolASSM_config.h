@@ -4,8 +4,29 @@
  * Christian
  * graetz23@gmail.com
  * created 20190511
- * updated 20200330
- * version 0.5
+ * version 20200331
+ *
+ * MIT License
+ *
+ * Copyright (c) 2019-2020 coolASSM Christian (graetz23@gmail.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 #ifndef __ARDUINO_COOLASSM_HELPER_H__
 #define __ARDUINO_COOLASSM_HELPER_H__
@@ -13,7 +34,7 @@
 #include <Arduino.h>
 
 /**
- * \brief The cool ASSM COMMANDs
+ * \brief the cool ASSM COMMANDs as IDs and STRINGs
  */
 #define ASSM_CMD_NULL        0 // NULL or NO COMMAND; is handled as a CMD
 #define ASSM_CMD_NULL_STR    "NULL"
@@ -56,7 +77,7 @@
 #define ASSM_STATE_RUNNING_STR  "RUNNING"
 
 /*!
- * The cool ASSM - cool arduino serial state machine
+ * a Helper for converting COMMANDs and STATEs from ID to String & vice versa
  */
 class ASSM_HELPER {
 
@@ -70,7 +91,7 @@ public:
   /*!
    * \brief Destructor
    */
-  ~ASSM_HELPER( void );
+  virtual ~ASSM_HELPER( void );
 
   /*!
    * \brief read a COMMAND as integer and hand back the matching string

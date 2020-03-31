@@ -4,8 +4,29 @@
  * Christian
  * graetz23@gmail.com
  * created 20190511
- * updated 20200330
- * version 0.5
+ * version 20200331 
+ *
+ * MIT License
+ *
+ * Copyright (c) 2019-2020 coolASSM Christian (graetz23@gmail.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 #ifndef __ARDUINO_COOLASSM_H__
 #define __ARDUINO_COOLASSM_H__
@@ -14,7 +35,7 @@
 #include <Wire.h>
 #include <SPI.h>
 
-#include "./coolASSM_commands.h" // the ASSM commands and converts ..
+#include "./coolASSM_config.h" // the COMMANDs and STATEs ..
 
 #define SERIAL_BAUD                         9600  // Baudrate
 // #define SERIAL_BAUD                      19200  // Baudrate
@@ -50,10 +71,32 @@ public:
   ASSM( void );
 
   /*!
-   * \brief Destructor
+   * \brief Destructor; virtual to have it called
    */
-  ~ASSM( void );
+  virtual ~ASSM( void );
 
+  /*!
+   * \brief take this to arduino's setup method; it connects the serial
+   * and sends a PING to client
+   */
+  void setup( );
+
+  /*!
+   * \brief display a welcome message for showing interactivity; not necessary
+   */
+  void welcome( );
+
+  /*!
+   * \brief display a ready message for showing interactivity; not necessary
+   */
+  void ready( );
+
+  /*!
+   * \brief take this to arduino's loop method to drive the state machine
+   */
+  void loop( );
+
+private:
   /*!
    * \brief cyclic called when coolASSM is in ERROR state - overload method
    */
@@ -116,25 +159,7 @@ public:
    */
   void display( String s );
 
-  /*!
-   * \brief Connect the serial and send ping to client
-   */
-  void setup( );
-
-  /*!
-   * \brief Display a welcome message for showing interactivity
-   */
-  void welcome( );
-
-  /*!
-   * \brief Display a ready message for showing interactivity
-   */
-  void ready( );
-
-  /*!
-   * \brief Connect the serial and send ping to client
-   */
-  void loop( );
+private: // some stuff that's not so interesting
 
   /*!
    * \brief Handing the RECEIVED or NEXT COMMAND and CURRENT STATE
@@ -153,16 +178,11 @@ public:
   /*!
    * \brief Listen the serial and decode the message received
    */
-  virtual uint8_t process( uint8_t command );
-
-private: // some stuff that's not so interesting
+  // virtual uint8_t process( uint8_t command );
 
   const char _markerHead = '<';
   const char _markerFoot = '>';
   const String _markerCommand = "CMD_";
-
-  // Adafruit_SSD1306* _display; // running OLEDisplay for msgs and dbgng
-  // U8GLIB_SH1106_128X64* _u8g;	// I2C / TWI
 
   /*!
    * \brief converts a char array into an integer
