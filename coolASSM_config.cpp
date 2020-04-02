@@ -142,10 +142,6 @@ String ASSM_HELPER::state_to_String( uint8_t state ) {
       str = ASSM_STATE_IDLE_STR;
     break;
 
-    case ASSM_STATE_RUNNING :
-      str = ASSM_STATE_RUNNING_STR;
-    break;
-
     case ASSM_STATE_MODE1 :
       str = ASSM_STATE_MODE1_STR;
     break;
@@ -192,8 +188,6 @@ uint8_t ASSM_HELPER::state_to_Integer( String state ) {
     integer = ASSM_STATE_ERROR;
   } else if( strcmp( cstate, ASSM_STATE_IDLE_STR ) == 0 ) {
     integer = ASSM_STATE_IDLE;
-  } else if( strcmp( cstate, ASSM_STATE_RUNNING_STR ) == 0 ) {
-    integer = ASSM_STATE_RUNNING;
   } else if( strcmp( cstate, ASSM_STATE_MODE1_STR ) == 0 ) {
     integer = ASSM_STATE_MODE1;
   } else if( strcmp( cstate, ASSM_STATE_MODE2_STR ) == 0 ) {

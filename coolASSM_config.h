@@ -107,8 +107,6 @@
 #define ASSM_STATE_ERROR_STR    "ERROR"
 #define ASSM_STATE_IDLE         1
 #define ASSM_STATE_IDLE_STR     "IDLE"
-#define ASSM_STATE_RUNNING      2
-#define ASSM_STATE_RUNNING_STR  "RUNNING"
 // the defined run MODES of arduino to do different jobs
 #define ASSM_STATE_MODE1      11
 #define ASSM_STATE_MODE1_STR  "MODE1"

@@ -103,12 +103,6 @@ protected:
    */
   virtual uint8_t idle( uint8_t command );
 
-  // decraped
-  /*!
-   * \brief cyclic called when coolASSM is in RUNNING state - overload method
-   */
-  virtual uint8_t running( uint8_t command );
-
   /*!
    * \brief cyclic called when coolASSM is in run MODE 1 state - overload method
    */

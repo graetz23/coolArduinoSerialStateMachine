@@ -50,7 +50,7 @@ The **STATES** are:
 Each _STATE_ has its own **CALLBACK** method; e.g. error( ), see listing above. Within these methods you can settle your own code _or_ **extend the class ASSM** and **overload these methods**.
 
 ### Remarks
-I use this project for driving own sensors remotely by a _raspberry pi_ running [CraftBeerPi3 (CBP3)](https://github.com/Manuel83/craftbeerpi3) coded in [python](https://www.python.org/). As a basisi for the written _CBP3 plugin_ I created [**coolPythonSerialStateMachine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) coded in [python](https://www.python.org/) as the **mirrowed project** of **coolASSM**. The project **coolPSSM can be adapted** to **any other python framework** or coding.
+I use this project for driving own sensors remotely by a _raspberry pi_ running [CraftBeerPi3 (CBP3)](https://github.com/Manuel83/craftbeerpi3) coded in [python](https://www.python.org/). As a basis for the written _CBP3 plugin_ I created [**coolPythonSerialStateMachine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) as a **mirrowed python project** of **coolASSM**. This project **can be adapted** to **any other python framework** or coding.
 
 Everything was coded using:
 
