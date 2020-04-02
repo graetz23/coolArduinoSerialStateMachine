@@ -76,7 +76,7 @@ void ASSM::ready( ) {
 } // method
 
 void ASSM::writeData_starting( uint8_t individual_command ) {
-  writeData_stopping( _helper->command_to_String( individual_command ) );
+  writeData_starting( _helper->command_to_String( individual_command ) );
 } // method
 
 void ASSM::writeData_starting( String individual_command ) {
@@ -91,7 +91,7 @@ void ASSM::writeData_stopping( uint8_t individual_command ) {
 
 void ASSM::writeData_stopping( String individual_command ) {
   String str = _helper->mark_as_Data_stopping( individual_command );
-  const char* cstr = individual_command.c_str( );
+  const char* cstr = str.c_str( );
   Serial.write( cstr );
 } // method
 
@@ -724,9 +724,9 @@ uint8_t ASSM::runMODE7( uint8_t command ) {
     // afterwards arduino responds with an UNIQUE
     // command, writes the data back to the client by:
     // <DATA>1;2;3;4;5;6;7;8;9;0</DATA>
-    writeCommand( "DATA" );
+    writeData_starting( "DATA" );
     writeData( "1;2;3;4;5;6;7;8;9;0" );
-    writeCommand( "/DATA" );
+    writeData_stopping( "DATA" );
     // at the end arduino sends a DONE command
     writeCommand( ASSM_CMD_DONE );
   } // if
