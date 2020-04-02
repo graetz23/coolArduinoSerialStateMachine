@@ -263,33 +263,29 @@ uint8_t ASSM::process_command( uint8_t command ) {
     break;
     // process the COMMAND RUN; now some working task should be processed
     case ASSM_CMD_RUN:
-      if(_state != ASSM_STATE_ERROR ) {
-        state = _state; // only if we are not in ERROR ..
-        if( _state == ASSM_STATE_MODE1 ) {
-          writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
-        } else if( _state == ASSM_STATE_MODE2 ) {
-          writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
-        } else if( _state == ASSM_STATE_MODE3 ) {
-          writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
-        } else if( _state == ASSM_STATE_MODE4 ) {
-          writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
-        } else if( _state == ASSM_STATE_MODE5 ) {
-          writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
-        } else if( _state == ASSM_STATE_MODE6 ) {
-          writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
-        } else if( _state == ASSM_STATE_MODE7 ) {
-          writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
-        } // if
+      if( _state == ASSM_STATE_MODE1 ) {
+        writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
+      } else if( _state == ASSM_STATE_MODE2 ) {
+        writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
+      } else if( _state == ASSM_STATE_MODE3 ) {
+        writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
+      } else if( _state == ASSM_STATE_MODE4 ) {
+        writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
+      } else if( _state == ASSM_STATE_MODE5 ) {
+        writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
+      } else if( _state == ASSM_STATE_MODE6 ) {
+        writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
+      } else if( _state == ASSM_STATE_MODE7 ) {
+        writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
       } else {
-        state = _state;
-      }// if
+        state = _state; // only if we are not in ERROR ..
+      } // if
       if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL ) {
         debug_command = ASSM_CMD_RUN;
       } // if
     break;
     // process the COMMAND STOP; leave some working task and return to IDLE
     case ASSM_CMD_STOP:
-      state = _state;
       if( _state == ASSM_STATE_MODE1 ) {
         state = ASSM_STATE_IDLE;
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
@@ -311,7 +307,9 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } else if( _state == ASSM_STATE_MODE7 ) {
         state = ASSM_STATE_IDLE;
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
-      } // if
+      } else {
+        state = _state;
+      }// if
       if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL ) {
         debug_command = ASSM_CMD_STOP;
       } // if
@@ -422,14 +420,14 @@ uint8_t ASSM::process_command( uint8_t command ) {
     break;
 
     // process the COMMAND CNCT
-    case ASSM_CMD_CNCT:
+    case ASSM_CMD_CNCT: // obviously useless
       // may be one want to CONNECT and DISCONNECT while IDLE / RUNNING ..
       state = _state;
       if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
         debug_command = ASSM_CMD_CNCT;
     break;
     // process the COMMAND DCNT
-    case ASSM_CMD_DCNT:
+    case ASSM_CMD_DCNT: // obviously useless
       // may be one want to CONNECT and DISCONNECT while IDLE / RUNNING ..
       state = _state;
       if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
@@ -447,7 +445,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } // if
     break;
 
-  } // switc
+  } // switch
 
   // display some debugging message to display
   if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL ) {
@@ -469,6 +467,7 @@ uint8_t ASSM::process_state( uint8_t state ) {
   uint8_t debug_state;
 
   switch( _state ) {
+
     case ASSM_STATE_ERROR: // SNA - State Not Available
       next_command = ASSM_CMD_NULL;
       if( ASSM_LED_ACTV ) {
@@ -575,13 +574,16 @@ uint8_t ASSM::process_state( uint8_t state ) {
         delay(ASSM_DEBUG_DISPLAY_BLANK);
       } // if
     break;
+
   } // switch
+
   if( ASSM_DEBUG_SHOW_STATE_INTERNAL ) {
     display( _helper->state_to_String( debug_state ) );
     delay(ASSM_DEBUG_DISPLAY_SHOW);
     display( "" );
     delay(ASSM_DEBUG_DISPLAY_BLANK);
   } // if
+
   return next_command;
 } // method
 
@@ -594,8 +596,9 @@ void ASSM::led_off(  ) {
 } // method
 
 void ASSM::led_blink( int duration ) {
-  if( duration < 10 )
+  if( duration < 10 ) {
     duration = duration;
+  } // if
   led_on( ); // sets the digital pin LED on
   delay( duration );            // waits for a moment in ECU time
   led_off( );  // sets the digital pin LED off
@@ -603,8 +606,9 @@ void ASSM::led_blink( int duration ) {
 } // method
 
 void ASSM::led_heartBeat( int interval ) {
-  if( interval < 200 )
+  if( interval < 200 ) {
     interval = 200; // arduino on steroids; 400 ms equals 150 bpm ..
+  } // if
   led_blink( 50 );
   delay( 100 );
   led_blink( 50 );
@@ -618,12 +622,12 @@ int ASSM::a2i(const char *s)
   if(*s == '-'){
     sign = -1;
     s++;
-  }
+  } // if
   int num=0;
   while(*s){
     num=((*s)-'0')+num*10;
     s++;
-  }
+  } // loop
   return num*sign;
 } // method
 
@@ -631,23 +635,15 @@ int ASSM::a2i(const char *s)
 // overload the class and next the methods
 
 uint8_t ASSM::error( uint8_t command ) {
-
   uint8_t next_command = ASSM_CMD_NULL; // in general KEEP this STATE
-
   // TODO Place your code for ERROR STATE or EXTEND CLASS and OVERLOAD method
-
   return next_command;
-
 } // method
 
 uint8_t ASSM::idle( uint8_t command ) {
-
   uint8_t next_command = ASSM_CMD_NULL; // in general KEEP this STATE
-
   // TODO Place your code for IDLE STATE or EXTEND CLASS and OVERLOAD method
-
   return next_command;
-
 } // method
 
 uint8_t ASSM::runMODE1( uint8_t command ) {
