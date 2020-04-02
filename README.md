@@ -11,7 +11,7 @@ The project itself shall be extended by including own code or methods to several
 For building the HEX file, the [arduino Makefile](https://github.com/sudar/Arduino-Makefile) is used. Clone or download / unzip this first to your system and configure the _Makefile_ by _your local path_ where you have cloned / unzipped. Change in  _Makefile_ to your arduino board and type: _make_ && _make upload_.
 
 ### Usage
-The **commands** are:
+The **COMMANDS** are:
 
   0. NULL - the null command is driven by the state machine itself,
   1. SNA - State not available; this is the error message that leads to ERROR state,
@@ -44,20 +44,36 @@ The **STATES** are:
   14. MODE4 - the machine processes the code of method: [run_MODE4()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
   15. MODE5 - the machine processes the code of method: [run_MODE5()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
   16. MODE6 - the machine processes the code of method: [run_MODE6()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  17. MODE7 - the machine processes the code of method: [run_MODE7()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp).    
+  17. MODE7 - the machine processes the code of method: [run_MODE7()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp).
 
 ### Callback methods for STATEs
 Each _STATE_ has its own **CALLBACK** method; e.g. error( ), see listing above. Within these methods you can settle your own code _or_ **extend the class ASSM** and **overload these methods**.
 
+For an example, run [run_MODE7()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp) is generating ans sending some dummy data if challenged / responded; try:
+
+  - **<17>**, to tell arduino to go to state **MODE7**:
+    - arduino will reply with an: **<AKNW/>**.
+  - **<7>**, to push an **EVENT** to arduino:
+    - arduino will again reply with an: **<AKNW/>**, and start processing:
+      - sends each second for three times a: **<WAIT/>**,
+      - and then the result: **<DATA>1.2;2.3;4.5;5.6;7.7;9.0</DATA>**.
+
+### Retrieving data
+
+All replies of arduino to your _client_ are _already_ [XML](https://en.wikipedia.org/wiki/XML) syntax that can be directly processed; e.g. in [python](https://www.python.org/).
+
 ### Remarks
-I use this project for driving own sensors remotely by a _raspberry pi_ running [CraftBeerPi3 (CBP3)](https://github.com/Manuel83/craftbeerpi3) coded in [python](https://www.python.org/). As a basis for the written _CBP3 plugin_ I created [**coolPythonSerialStateMachine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) as a **mirrowed python project** of **coolASSM**. This project **can be adapted** to **any other python framework** or coding.
+I use this project as a basis for sensor applications; e.g. see: coolASSTCP
+
+On client side I use the _mirrow_ project: [**coolPythonSerialStateMachine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) to implement the (sensor / actor / ..) data processing .
 
 Everything was coded using:
 
-  - [**atom**](https://atom.io/) editor,
-  - [**arduino Makefile**](https://github.com/sudar/Arduino-Makefile),
-  - [**Gnome**](https://www.gnome.org/) windows manager,
-  - and [**debian**](https://www.debian.org/) GNU/Linux.
+- [**atom**](https://atom.io/) editor,
+- [**arduino Makefile**](https://github.com/sudar/Arduino-Makefile) for automated building,
+- [**arduino IDE**](https://www.arduino.cc/en/main/software) for serial monitor,
+- [**Gnome**](https://www.gnome.org/) as window manager,
+- and [**debian**](https://www.debian.org/) GNU/Linux.
 
 have fun :-)
 
