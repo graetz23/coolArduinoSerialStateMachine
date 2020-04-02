@@ -46,11 +46,11 @@ The **STATES** are:
   16. MODE6 - the machine processes the code of method: [run_MODE6()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
   17. MODE7 - the machine processes the code of method: [run_MODE7()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp).    
 
-### Callback methods
-Each _processing_ command (and each state) has its own **CALLBACK** method. Within this methods you can settle your own code or calls by _overloading_ the method. Therefore, extend the class by an own class and just reimplement the methods with your processing.
+### Callback methods for STATEs
+Each _STATE_ has its own **CALLBACK** method; e.g. error( ), see listing above. Within these methods you can settle your own code _or_ **extend the class ASSM** and **overload these methods**.
 
 ### Remarks
-I use this project for driving own sensors remotely.
+I use this project for driving own sensors remotely by a _raspberry pi_ running (CraftBeerPi3 (CBP3))[https://github.com/Manuel83/craftbeerpi3] coded in (python)[https://www.python.org/]. As a basisi for the written _CBP3 plugin_ I created (**coolPythonSerialStateMachine (coolPSSM)**)[https://github.com/graetz23/coolPythonSerialStateMachine] coded in (python)[https://www.python.org/] as the **mirrowed project** of **coolASSM**. The project **coolPSSM can be adapted** to **any other python framework** or coding.
 
 Everything was coded using:
 
@@ -59,6 +59,7 @@ Everything was coded using:
   - [**Gnome**](https://www.gnome.org/) windows manager,
   - and [**debian**](https://www.debian.org/) GNU/Linux.
 
+have fun :-)
 
 ## ChangeLog
 
@@ -77,7 +78,7 @@ Everything was coded using:
   - added STATEs:
     - MODE1, MODE2, MODE3, MODE4, MODE5, MODE6, MODE7,
     - equivalent IDs are: 11, 12, 13, 14, 15, 15, 16, 17.
-  - STATE _running_ with ID _3_ is decrapted,
+  - STATE _running_ with ID _3_ is deprecated,
   - changed COMMAND CONNECT:
     - to name _CNCT_,
     - and ID to 18.
