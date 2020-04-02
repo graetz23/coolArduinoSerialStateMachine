@@ -4,7 +4,7 @@
  * Christian
  * graetz23@gmail.com
  * created 20190511
- * version 20200331
+ * version 20200402
  *
  * MIT License
  *
@@ -35,26 +35,19 @@
 #include "./coolASSM.h" // cool arduino serial state machine
 ASSM assm; // static object
 
-#define LED 13 // arduino's built-in LED
-
 void setup( ) {
 
-  pinMode(LED, OUTPUT); // arduino's built-in LED
-
   assm.setup( ); // start serial console, and etc.
+  // not necessary but helpful ..
   assm.welcome( ); // display some welcome message
-  assm.ready( ); // display some welcome message
+  assm.ready( ); // display some alive message
 
 } // method
 
 void loop( ) {
 
-  digitalWrite(LED, HIGH); // sets the digital pin LED on
-  // delay(10);            // waits for a moment in ECU time
 
   assm.loop( ); // processing loop of ASSM; it's not a while one ..
-
-  digitalWrite(LED, LOW);  // sets the digital pin LED off
 
   delay(100);
 

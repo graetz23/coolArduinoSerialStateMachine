@@ -1,12 +1,12 @@
 #
-# coolASSM - cool arduino serial state machine
+# Arduino Make file. Refer to https://github.com/sudar/Arduino-Makefile
+#
+# coolASSM
 #
 # Christian
 # graetz23@gmail.com
 # created 20190511
-# updated 20200329
-
-# Arduino Make file. Refer to https://github.com/sudar/Arduino-Makefile
+# updated 20200402
 
 BOARD_TAG    = uno
 include $(ARDUINO_DIR)/Arduino.mk
