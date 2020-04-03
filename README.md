@@ -11,61 +11,94 @@ The project itself shall be extended by including own code or methods to several
 For building the HEX file, the [arduino Makefile](https://github.com/sudar/Arduino-Makefile) is used. Clone or download / unzip this first to your system and configure the _Makefile_ by _your local path_ where you have cloned / unzipped. Change in  _Makefile_ to your arduino board and type: _make_ && _make upload_.
 
 ### Usage
+
+After start up arduino has **nine STATES** available:
+
+  - **ERROR** - arduino swtches from _all other states_, turn permanently (predefined) LED 13 on, and processes code of method: [**error()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
+  - **IDLE** - arduino switches from ERROR and _all other_ MODEs, and is idling, does a heartbeat blinking on LED 13, and processes code of method:  [**idle()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
+  - **MODE1** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE1()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
+  - **MODE2** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE2()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
+  - **MODE3** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE3()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
+  - **MODE4** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE4()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
+  - **MODE5** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE5()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
+  - **MODE6** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE6()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
+  - **MODE7** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE7()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp).
+
+To switch between theses STATEs, **COMMANDs** are sent to _arduino_. Theses COMMANDs **follow** an **XML like** syntax: **<CMD_ID>**.
+
 The **COMMANDS** are:
 
-  0. NULL - the null command is driven by the state machine itself,
-  1. SNA - State not available; this is the error message that leads to ERROR state,
-  2. PING - send to request a PONG and to go to IDLE state,
-  3. PONG - send to request a PING and to go to IDLE state,
-  4. AKNWLDG - responded by eachother in case of a request,
-  5. RUN - request to go from IDLE state to PROCESSING state,
-  6. WAIT - may be responded to request that can not be processed yet,
-  7. EVENT - may be send as notifier that an event has happend,
-  8. DONE - may be send as notifier / finishing message,
-  9. STOP - send to go out of PROCESSING state ot IDLE state,
-  10. STATUS - request for sending back the current state,
-  11. run MODE 1 - go from ANY state to this run MODE 1, if not in ERROR state,
-  12. run MODE 2 - go from ANY state to this run MODE 2, if not in ERROR state,
-  13. run MODE 3 - go from ANY state to this run MODE 3, if not in ERROR state,
-  14. run MODE 4 - go from ANY state to this run MODE 4, if not in ERROR state,
-  15. run MODE 5 - go from ANY state to this run MODE 5, if not in ERROR state,
-  16. run MODE 6 - go from ANY state to this run MODE 6, if not in ERROR state,
-  17. run MODE 7 - go from ANY state to this run MODE 7, if not in ERROR state,
-  18. CNCT - may be used to establish a connection,
-  19. DSNT - may be used to release an established connection.
+  - **<0>** NULL - the null command is driven internally by arduino itself,
+  - **<1>** SNA - State Not Available; sent arduino in ERROR state,
+  - **<2>** PING - is replied by PONG and let arduino from ERROR to IDLE state,
+  - **<3>** PONG - is replied by PING and let arduino from ERROR to IDLE state,
+  - **<4>** AKNW - may be sent to arduino as an _notifier_; _optionally_,
+  - **<5>** RUN - may be sent to arduino to _start_ any run MODE; _optionally_,
+  - **<6>** WAIT - may arduino reply while it is processing data in a loop; _optionally_,
+  - **<7>** EVENT - may be sent to arduino to request some data processing; _optionally_,
+  - **<8>** DONE - may be sent as _notifier_ of finishing a data processing; _optionally_,
+  - **<9>** STOP - is sent to arduino to return from _any_ run MODE to IDLE state,
+  - **<10>** STATUS - is _always_ replied by the current state of arduino,
+  - **<11>** run MODE1 - go from ANY state to this run MODE1, if not in ERROR state,
+  - **<12>** run MODE2 - go from ANY state to this run MODE2, if not in ERROR state,
+  - **<13>** run MODE3 - go from ANY state to this run MODE3, if not in ERROR state,
+  - **<14>** run MODE4 - go from ANY state to this run MODE4, if not in ERROR state,
+  - **<15>** run MODE5 - go from ANY state to this run MODE5, if not in ERROR state,
+  - **<16>** run MODE6 - go from ANY state to this run MODE6, if not in ERROR state,
+  - **<17>** run MODE7 - go from ANY state to this run MODE7, if not in ERROR state,
+  - **<18>** CNCT - may be used to establish a connection; _optionally_,
+  - **<19>** DSNT - may be used to release a connection; _optionally_.
 
-The **STATES** are:
+If _theses_ COMMANDs are **sent by their ID** to arduino**. However, **arduino will not reply by an ID**. arduino will replay **instead by an - regular - XML syntax**:  
 
-  0. ERROR - the machine go to this state in case of an error, executes [error()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  1. IDLE - the machine is idling, waiting for commands, executes [idle()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  11. MODE1 - the machine processes the code of method: [run_MODE1()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  12. MODE2 - the machine processes the code of method: [run_MODE2()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  13. MODE3 - the machine processes the code of method: [run_MODE3()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  14. MODE4 - the machine processes the code of method: [run_MODE4()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  15. MODE5 - the machine processes the code of method: [run_MODE5()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  16. MODE6 - the machine processes the code of method: [run_MODE6()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  17. MODE7 - the machine processes the code of method: [run_MODE7()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp).
+  - For single replys, arduino uses _single / empty XML tags_ **<CMD_STR/>**,
+  - For **content** (data) replys, arduino may use _XML tags_ **<CMD_STR>content</CMD_STR>**; _optionally_.
 
-### Callback methods for STATEs
-Each _STATE_ has its own **CALLBACK** method; e.g. error( ), see listing above. Within these methods you can settle your own code _or_ **extend the class ASSM** and **overload these methods**.
+All replies of arduino to your _client_ can be directly processed as [XML](https://en.wikipedia.org/wiki/XML); e.g. in [python](https://www.python.org/).
 
-For an example, run [run_MODE7()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp) is generating ans sending some dummy data if challenged / responded; try:
+Examples look like:
 
-  - **<17>**, to tell arduino to go to state **MODE7**:
-    - arduino will reply with an: **<AKNW/>**.
-  - **<7>**, to push an **EVENT** to arduino:
-    - arduino will again reply with an: **<AKNW/>**, and start processing:
-      - sends each second for three times a: **<WAIT/>**,
-      - and then the result: **<DATA>1.2;2.3;4.5;5.6;7.7;9.0</DATA>**.
+  - Single / empty XML reply: a sent **<10>** to arduino, will be replied by its state, e.g. **<IDLE/>**, **<MODE1/>**, or **<MODE2/>**
+  - And ; _optional_ Content / data XML replys _may be implemented_ like:
+    - **<DATA>**1.2;3.4;5.6</DATA>**,
+    - **<INFO>sensor A0: is broke</INFO>**,
+    - **<LOG>system voltage: 5.783</LOG>**,
+    - **<MSG>0700 - good morning</MSG>**.
 
-### Retrieving data
+Theses content / data based replies are held _fully independent_; those are not predefined. You can individually implemented such by _extending_ the class _ASSM_, **overloading** the **virtual methods** up to _all_ STATEs.
 
-All replies of arduino to your _client_ are _already_ [XML](https://en.wikipedia.org/wiki/XML) syntax that can be directly processed; e.g. in [python](https://www.python.org/).
+### Example
+
+For an example, run [run_MODE7()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp) is generating and sending some dummy data after processing. You can challenge arduino to process and responded - try:
+
+  - flash / boot arduino out of the box,
+  - start _arduino IDE_ and press: **SHFT + CTRL + m** to ope serial monitor,
+    - be sure you have the _right port_ and the _correct baudrate_.
+  - Type into the serial monitor:
+    - **<17>**, to tell arduino to go to state of run **MODE7**:
+      - arduino will start processing and reply with an: **<AKNW/>**.
+    - **<7>**, to sent an **EVENT** to arduino:
+      - arduino will reply with an: **<AKNW/>**, and start processing:
+        - sents each second for three times a: **<WAIT/>** to you,
+        - and afterwards the result: **<DATA>1.2;3.4;5.6</DATA>**.
+    - **<9>**, to tell arduino to go back to state IDLE and blinks a heartbeat.
+
+### Retrieving data \& individual commands
+
+For retrieving data / content / logs / messages / .. /, you can use the following predefined methods:
+
+  - **writeData_starting( String str )** - let arduino sent: **<str>**,  
+  - **writeData( String str )** - let arduino sent: **str**,  
+  - **writeData_stopping( String str )** - let arduino sent: **</str>**.  
+
+For retrieving _individual_ COMMANDSs for adapting those on your client side, you can use the following predefiend method:
+
+  - **writeCommand( Str str )** - let arduino sent: **<str/>**.
 
 ### Remarks
-I use this project as a basis for sensor applications; e.g. see: coolASSTCP
+I use this project as a basis for sensor applications; e.g. see: [coolASSTCP](https://github.com/graetz23/coolArduinoSerialStateTCP).
 
-On client side I use the _mirrow_ project: [**coolPythonSerialStateMachine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) to implement the (sensor / actor / ..) data processing .
+On client side I use the _mirrow_ project: [**coolPythonSerialStateMachine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) to implement the processing of retrieved data / content / logs / messages / .. /; the project is not finished yet.
 
 Everything was coded using:
 
@@ -78,6 +111,9 @@ Everything was coded using:
 have fun :-)
 
 ## ChangeLog
+
+**20200403**
+  - extending the README.
 
 **20200402**
   - add light up and flashing of arduino's built in LED on PIN 13:
