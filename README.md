@@ -95,6 +95,15 @@ For retrieving _individual_ COMMANDs for adapting those on your client side, you
 
   - **writeCommand( Str str )** - let arduino sent: **\<str\/\>**.
 
+### Releases
+
+The following stable **releases** of coolASSM [are available](https://github.com/graetz23/coolArduinoSerialStateMachine/releases):
+
+  - **v1** - **stable**, keeping configurable _DEBUG_DISPLAY_ messages,
+  - **v1.1** - **stable**, cleaned and better _readable_ code; no _DEBUG_DISPLAY_ messages.
+
+**Try cloning** (git checkout \<SHA\>) or **download** and unzip **from** [**release page**]https://github.com/graetz23/coolArduinoSerialStateMachine/releases.
+
 ### Remarks
 I use this project as a basis for sensor applications; e.g. see: [coolASSTCP](https://github.com/graetz23/coolArduinoSerialStateTCP).
 
