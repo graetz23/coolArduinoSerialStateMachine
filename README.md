@@ -47,23 +47,23 @@ The **COMMANDS** are:
   - **<16>** run MODE6 - go from ANY state to this run MODE6, if not in ERROR state,
   - **<17>** run MODE7 - go from ANY state to this run MODE7, if not in ERROR state,
   - **<18>** CNCT - may be used to establish a connection; _optionally_,
-  - **<19>** DSNT - may be used to release a connection; _optionally_.
+  - **<19>** DCNT - may be used to release a connection; _optionally_.
 
-If _theses_ COMMANDs are **sent by their ID** to arduino**. However, **arduino will not reply by an ID**. arduino will replay **instead by an - regular - XML syntax**:  
+Theses COMMANDs are **sent by their ID** to arduino**. However, **arduino will not reply by an ID**, arduino will reply **instead by an - regular - XML syntax**:  
 
   - For single replys, arduino uses _single / empty XML tags_ **<CMD_STR/>**,
-  - For **content** (data) replys, arduino may use _XML tags_ **<CMD_STR>content</CMD_STR>**; _optionally_.
+  - For **data** replys, arduino may use _XML tags_ **<CMD_STR>data</CMD_STR>**; _optionally_.
 
 All replies of arduino to your _client_ can be directly processed as [XML](https://en.wikipedia.org/wiki/XML); e.g. in [python](https://www.python.org/).
 
 Examples look like:
 
-  - Single / empty XML reply: a sent **<10>** to arduino, will be replied by its state, e.g. **<IDLE/>**, **<MODE1/>**, or **<MODE2/>**
+  - Single / empty XML reply: a sent **<10>** to arduino, will be replied by its state, e.g. **\<IDLE\/\>**, **\<MODE1\/\>**, or **\<MODE2\/\>**
   - And ; _optional_ Content / data XML replys _may be implemented_ like:
-    - **<DATA>**1.2;3.4;5.6</DATA>**,
-    - **<INFO>sensor A0: is broke</INFO>**,
-    - **<LOG>system voltage: 5.783</LOG>**,
-    - **<MSG>0700 - good morning</MSG>**.
+    - **\<DATA\>**1.2;3.4;5.6\<\/DATA\>**,
+    - **\<INFO\>sensor A0: is broke\<\/INFO\>**,
+    - **\<LOG\>system voltage: 5.783\<\/LOG\>**,
+    - **\<MSG\>0700 - good morning\<\/MSG\>**.
 
 Theses content / data based replies are held _fully independent_; those are not predefined. You can individually implemented such by _extending_ the class _ASSM_, **overloading** the **virtual methods** up to _all_ STATEs.
 
