@@ -85,20 +85,20 @@ For an example, [run_MODE7()](https://github.com/graetz23/coolArduinoSerialState
 
 ### Retrieving data \& individual commands
 
-For retrieving data / content / logs / messages / .. /, you can use the following predefined methods:
+For retrieving data / content / logs / messages / .. /, you can use the following predefined methods, while extending class ASSM:
 
-  - **writeData_starting( String str )** - let arduino sent: **<str>**,  
+  - **writeData_starting( String str )** - let arduino sent: **\<str\>**,  
   - **writeData( String str )** - let arduino sent: **str**,  
-  - **writeData_stopping( String str )** - let arduino sent: **</str>**.  
+  - **writeData_stopping( String str )** - let arduino sent: **\<\/str\>**.  
 
-For retrieving _individual_ COMMANDSs for adapting those on your client side, you can use the following predefiend method:
+For retrieving _individual_ COMMANDs for adapting those on your client side, you can use the following predefiend method:
 
-  - **writeCommand( Str str )** - let arduino sent: **<str/>**.
+  - **writeCommand( Str str )** - let arduino sent: **\<str\/\>**.
 
 ### Remarks
 I use this project as a basis for sensor applications; e.g. see: [coolASSTCP](https://github.com/graetz23/coolArduinoSerialStateTCP).
 
-On client side I use the _mirrow_ project: [**coolPythonSerialStateMachine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) to implement the processing of retrieved data / content / logs / messages / .. /; the project is not finished yet.
+On client side I use the _mirrow_ project: [**cool Python Serial State Machine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) to implement the processing of retrieved data / content / logs / messages / .. / from arduino; the project is still ongoing and not stable yet.
 
 Everything was coded using:
 
