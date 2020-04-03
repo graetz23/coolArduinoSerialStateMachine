@@ -60,10 +60,10 @@ Examples look like:
 
   - Single / empty XML reply: a sent **<10>** to arduino, will be replied by its state, e.g. **\<IDLE\/\>**, **\<MODE1\/\>**, or **\<MODE2\/\>**
   - And ; _optional_ Content / data XML replys _may be implemented_ like:
-    - **\<DATA\>**1.2;3.4;5.6\<\/DATA\>**,
-    - **\<INFO\>sensor A0: is broke\<\/INFO\>**,
-    - **\<LOG\>system voltage: 5.783\<\/LOG\>**,
-    - **\<MSG\>0700 - good morning\<\/MSG\>**.
+    - **\<DATA\>** 1.2;3.4;5.6 **\<\/DATA\>**,
+    - **\<INFO\>sensor A0: is broke\<\/INFO\> **,
+    - **\<LOG\>system voltage: 5.783\<\/LOG\> **,
+    - **\<MSG\>0700 - good morning\<\/MSG\> **.
 
 Theses content / data based replies are held _fully independent_; those are not predefined. You can individually implemented such by _extending_ the class _ASSM_, **overloading** the **virtual methods** up to _all_ STATEs.
 
