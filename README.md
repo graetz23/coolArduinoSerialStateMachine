@@ -61,26 +61,26 @@ Examples look like:
   - Single / empty XML reply: a sent **<10>** to arduino, will be replied by its state, e.g. **\<IDLE\/\>**, **\<MODE1\/\>**, or **\<MODE2\/\>**
   - And ; _optional_ Content / data XML replys _may be implemented_ like:
     - **\<DATA\>** 1.2;3.4;5.6 **\<\/DATA\>**,
-    - **\<INFO\>** sensor A0: is broke **\<\/INFO\> **,
-    - **\<LOG\>** system voltage: 5.783 **\<\/LOG\> **,
-    - **\<MSG\>** 0700 - good morning **\<\/MSG\> **.
+    - **\<INFO\>** sensor A0: is broke **\<\/INFO\>**,
+    - **\<LOG\>** system voltage: 5.783 **\<\/LOG\>**,
+    - **\<MSG\>** 0700 - good morning **\<\/MSG\>**.
 
-Theses content / data based replies are held _fully independent_; those are not predefined. You can individually implemented such by _extending_ the class _ASSM_, **overloading** the **virtual methods** up to _all_ STATEs.
+Theses content / data based replies are held _fully independent_; those are not predefined. You can individually implemented such by **extending** the **class ASSM**, **overloading** the **virtual methods** up to _all_ STATEs.
 
 ### Example
 
-For an example, run [run_MODE7()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp) is generating and sending some dummy data after processing. You can challenge arduino to process and responded - try:
+For an example, [run_MODE7()](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp) is generating and sending some dummy data after processing. You can challenge arduino to process and responded - try:
 
-  - flash / boot arduino out of the box,
-  - start _arduino IDE_ and press: **SHFT + CTRL + m** to ope serial monitor,
+  - flash / boot arduino out of the box with [coolASSM.ino](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.ino),
+  - start _arduino IDE_ and press: **SHFT + CTRL + m** to open serial monitor,
     - be sure you have the _right port_ and the _correct baudrate_.
   - Type into the serial monitor:
-    - **<17>**, to tell arduino to go to state of run **MODE7**:
+    - **<17>**, to tell arduino to go to STATE: run **MODE7**:
       - arduino will start processing and reply with an: **<AKNW/>**.
     - **<7>**, to sent an **EVENT** to arduino:
-      - arduino will reply with an: **<AKNW/>**, and start processing:
-        - sents each second for three times a: **<WAIT/>** to you,
-        - and afterwards the result: **<DATA>1.2;3.4;5.6</DATA>**.
+      - arduino will reply with an: **\<AKNW\/\>**, and start processing:
+        - sents each second for three times a: **\<WAIT\/\>** to you,
+        - and afterwards the result: **\<DATA\>** 1.2;3.4;5.6 **\<\/DATA\>**.
     - **<9>**, to tell arduino to go back to state IDLE and blinks a heartbeat.
 
 ### Retrieving data \& individual commands
