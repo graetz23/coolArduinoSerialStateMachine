@@ -56,7 +56,6 @@ ASSM_HELPER* ASSM::get_ASSM_HELPER( void ) {
 } // method
 
 void ASSM::display( String s ) {
-  // const char* cstr = s.c_str();
   String sstate = _helper->state_to_String( _state );
   const char* cstate = sstate.c_str();
   String scmmnd = _helper->command_to_String( _command );
@@ -177,47 +176,16 @@ uint8_t ASSM::readCommand( ) {
 void ASSM::loop( ) {
 
   uint8_t command = readCommand( ); // read and filter a command from serial
-
-  if( ASSM_DEBUG_SHOW_COMMAND ) {
-    display( "COMMAND ->" );
-    delay( ASSM_DEBUG_DISPLAY_BLANK );
-    display( _helper->command_to_String( command ) );
-    delay( ASSM_DEBUG_DISPLAY_SHOW );
-    display( "" );
-    delay( ASSM_DEBUG_DISPLAY_BLANK );
-    // TODO tell about state machine
-  } // if
-
   uint8_t command_internal = command;
 
   bool isProcessingInternally = true;
-
   while( isProcessingInternally ) {
 
     uint8_t state = process_command( command_internal );
-
-    if( ASSM_DEBUG_SHOW_STATE ) {
-      display( "STATE ->" );
-      delay( ASSM_DEBUG_DISPLAY_BLANK );
-      display( _helper->state_to_String( state ) );
-      delay( ASSM_DEBUG_DISPLAY_SHOW );
-      display( "" );
-      delay( ASSM_DEBUG_DISPLAY_BLANK );
-      // TODO tell about state machine
-    } // if
-
     command_internal = process_state( state );
 
     if( command_internal == ASSM_CMD_NULL ) {
       isProcessingInternally = false;
-    } // if
-
-    if( ASSM_DEBUG ) {
-      display( "DEBUG" );
-      delay( ASSM_DEBUG_DISPLAY_SHOW );
-      display( "" );
-      delay( ASSM_DEBUG_DISPLAY_BLANK );
-      // TODO tell about state machine
     } // if
 
   } // loop
@@ -230,14 +198,10 @@ uint8_t ASSM::process_command( uint8_t command ) {
 
   uint8_t state = ASSM_STATE_ERROR; // initial state is always last state
 
-  uint8_t debug_command;
-
   switch( _command ) {
     // process the COMMAND SNA - State Not Available; we are in ERROR state ..
     case ASSM_CMD_SNA:
       state = ASSM_STATE_ERROR; // keep ERROR state as fundamental STATE .. ;-)
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_SNA;
       break;
     // process the COMMAND PING
     case ASSM_CMD_PING:
@@ -247,8 +211,6 @@ uint8_t ASSM::process_command( uint8_t command ) {
         state = _state; // keep same STATE ..
       }// if
       writeCommand( ASSM_CMD_PONG ); // ALWAYS answer a PING with a PONG
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_PING;
     break;
     // process the COMMAND PONG
     case ASSM_CMD_PONG:
@@ -258,14 +220,10 @@ uint8_t ASSM::process_command( uint8_t command ) {
         state = _state; // keep same STATE ..
       }// if
       writeCommand( ASSM_CMD_PING ); // ALWAYS answer a PONG with a PING
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_PONG;
     break;
     // process the COMMAND ACKNOWLEDGE; not really something to do here ..
     case ASSM_CMD_AKNW:
       state = _state;
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_AKNW;
     break;
     // process the COMMAND RUN; now some working task should be processed
     case ASSM_CMD_RUN:
@@ -292,9 +250,6 @@ uint8_t ASSM::process_command( uint8_t command ) {
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
       } else {
         state = _state; // keep same STATE ..
-      } // if
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL ) {
-        debug_command = ASSM_CMD_RUN;
       } // if
     break;
     // process the COMMAND STOP; leave some working task and return to IDLE
@@ -323,28 +278,19 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } else {
         state = _state; // keep same STATE ..
       }// if
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL ) {
-        debug_command = ASSM_CMD_STOP;
-      } // if
     break;
     // process the COMMAND WAIT; may be stop some processing task ..
     case ASSM_CMD_WAIT:
       state = _state; // keep same STATE ..
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_WAIT;
     break;
     // process the COMMAND EVENT; may be do something while processing ..
     case ASSM_CMD_EVENT:
       state = _state; // keep same STATE ..
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_EVENT;
     break;
     // process the COMMAND STATUS
     case ASSM_CMD_STATUS:
       state = _state; // keep same STATE ..
       writeState( _state ); // ALWAYS tell about the current STATE
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_STATUS;
     break;
 
     // process the COMMAND run MODEs
@@ -356,8 +302,6 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } else {
         state = _state; // keep same STATE ..
       }// if
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_RNMD1;
     break;
 
     // process COMMAND run MODE 2
@@ -368,8 +312,6 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } else {
         state = _state; // keep same STATE ..
       }// if
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_RNMD2;
     break;
 
     // process COMMAND run MODE 3
@@ -380,8 +322,6 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } else {
         state = _state; // keep same STATE ..
       }// if
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_RNMD3;
     break;
 
     // process COMMAND run MODE 4
@@ -392,8 +332,6 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } else {
         state = _state; // keep same STATE ..
       }// if
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_RNMD4;
     break;
 
     // process COMMAND run MODE 5
@@ -404,8 +342,6 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } else {
         state = _state; // keep same STATE ..
       }// if
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_RNMD5;
     break;
 
     // process COMMAND run MODE 6
@@ -416,8 +352,6 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } else {
         state = _state; // keep same STATE ..
       }// if
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_RNMD6;
     break;
 
     // process COMMAND run MODE 7
@@ -428,45 +362,25 @@ uint8_t ASSM::process_command( uint8_t command ) {
       } else {
         state = _state; // keep same STATE ..
       }// if
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_RNMD7;
     break;
 
     // process the COMMAND CNCT
     case ASSM_CMD_CNCT: // obviously useless
       // may be one want to CONNECT and DISCONNECT while IDLE / RUNNING ..
       state = _state; // keep same STATE ..
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_CNCT;
     break;
     // process the COMMAND DCNT
     case ASSM_CMD_DCNT: // obviously useless
       // may be one want to CONNECT and DISCONNECT while IDLE / RUNNING ..
       state = _state; // keep same STATE ..
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL )
-        debug_command = ASSM_CMD_DCNT;
     break;
 
     // process no (NULL) or an unknown COMMAND
     default: // NULL command
       state = _state;  // keep same STATE ..
-      if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL ) {
-        display( "CMND NULL" );
-        delay(ASSM_DEBUG_DISPLAY_SHOW);
-        display( "" );
-        delay(ASSM_DEBUG_DISPLAY_BLANK);
-      } // if
     break;
 
   } // switch
-
-  // display some debugging message to display
-  if( ASSM_DEBUG_SHOW_COMMAND_INTERNAL ) {
-    display( _helper->command_to_String( debug_command ) );
-    delay(ASSM_DEBUG_DISPLAY_SHOW);
-    display( "" );
-    delay(ASSM_DEBUG_DISPLAY_BLANK);
-  } // if
 
   return state; // hand back next STATE by processed COMMAND
 } // method
@@ -477,8 +391,6 @@ uint8_t ASSM::process_state( uint8_t state ) {
 
   uint8_t next_command = ASSM_CMD_NULL; // return no command
 
-  uint8_t debug_state;
-
   switch( _state ) {
 
     case ASSM_STATE_ERROR: // SNA - State Not Available
@@ -487,8 +399,6 @@ uint8_t ASSM::process_state( uint8_t state ) {
         led_on( ); // switch STATE indicator permanently on ..
       } // if
       next_command = error( _command );
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
-        debug_state = ASSM_STATE_ERROR;
       break;
 
     case ASSM_STATE_IDLE: // IDLE around, and around, and arountthe world
@@ -497,8 +407,6 @@ uint8_t ASSM::process_state( uint8_t state ) {
         led_heartBeat( 800 ); // 60 bpm heartbeat; 200 blink + 800 wait
       } // if
       next_command = idle( _command );
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
-        debug_state = ASSM_STATE_IDLE;
     break;
 
     case ASSM_STATE_MODE1: // run MODE 1
@@ -507,9 +415,6 @@ uint8_t ASSM::process_state( uint8_t state ) {
         led_blink( 10 ); // let flash 20 milliseonds as load indicator ..
       } // if
       next_command = runMODE1( _command );
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
-        debug_state = ASSM_STATE_MODE1;
-      // next_command = ASSM_CMD_NULL;
     break;
 
     case ASSM_STATE_MODE2: // run MODE 2
@@ -518,9 +423,6 @@ uint8_t ASSM::process_state( uint8_t state ) {
         led_blink( 10 ); // let flash 20 milliseonds as load indicator ..
       } // if
       next_command = runMODE2( _command );
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
-        debug_state = ASSM_STATE_MODE2;
-      // next_command = ASSM_CMD_NULL;
     break;
 
     case ASSM_STATE_MODE3: // run MODE 3
@@ -529,9 +431,6 @@ uint8_t ASSM::process_state( uint8_t state ) {
         led_blink( 10 ); // let flash 20 milliseonds as load indicator ..
       } // if
       next_command = runMODE3( _command );
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
-        debug_state = ASSM_STATE_MODE3;
-      // next_command = ASSM_CMD_NULL;
     break;
 
     case ASSM_STATE_MODE4: // run MODE 4
@@ -540,9 +439,6 @@ uint8_t ASSM::process_state( uint8_t state ) {
         led_blink( 10 ); // let flash 20 milliseonds as load indicator ..
       } // if
       next_command = runMODE4( _command );
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
-        debug_state = ASSM_STATE_MODE4;
-      // next_command = ASSM_CMD_NULL;
     break;
 
     case ASSM_STATE_MODE5: // run MODE 5
@@ -551,9 +447,6 @@ uint8_t ASSM::process_state( uint8_t state ) {
         led_blink( 10 ); // let flash 20 milliseonds as load indicator ..
       } // if
       next_command = runMODE5( _command );
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
-        debug_state = ASSM_STATE_MODE5;
-      // next_command = ASSM_CMD_NULL;
     break;
 
     case ASSM_STATE_MODE6: // run MODE 6
@@ -562,9 +455,6 @@ uint8_t ASSM::process_state( uint8_t state ) {
         led_blink( 10 ); // let flash 20 milliseonds as load indicator ..
       } // if
       next_command = runMODE6( _command );
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
-        debug_state = ASSM_STATE_MODE6;
-      // next_command = ASSM_CMD_NULL;
     break;
 
     case ASSM_STATE_MODE7: // run MODE 7
@@ -573,29 +463,13 @@ uint8_t ASSM::process_state( uint8_t state ) {
         led_blink( 10 ); // let flash 20 milliseonds as load indicator ..
       } // if
       next_command = runMODE7( _command );
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL )
-        debug_state = ASSM_STATE_MODE7;
-      // next_command = ASSM_CMD_NULL;
     break;
 
     default:
       next_command = ASSM_CMD_NULL;
-      if( ASSM_DEBUG_SHOW_STATE_INTERNAL ) {
-        display( "def_state" );
-        delay(ASSM_DEBUG_DISPLAY_SHOW);
-        display( "" );
-        delay(ASSM_DEBUG_DISPLAY_BLANK);
-      } // if
     break;
 
   } // switch
-
-  if( ASSM_DEBUG_SHOW_STATE_INTERNAL ) {
-    display( _helper->state_to_String( debug_state ) );
-    delay(ASSM_DEBUG_DISPLAY_SHOW);
-    display( "" );
-    delay(ASSM_DEBUG_DISPLAY_BLANK);
-  } // if
 
   return next_command;
 } // method
@@ -627,7 +501,6 @@ void ASSM::led_heartBeat( int interval ) {
   led_blink( 50 );
   delay( interval );
 } // method
-
 
 int ASSM::a2i(const char *s)
 {
