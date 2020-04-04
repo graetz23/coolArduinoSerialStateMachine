@@ -4,7 +4,7 @@
  * Christian
  * graetz23@gmail.com
  * created 20190511
- * version 20200403
+ * version 20200404
  *
  * MIT License
  *
@@ -37,7 +37,7 @@ ASSM::ASSM( void ) {
   if( ASSM_LED_ACTV ) {
     pinMode( ASSM_LED_PIN, OUTPUT ); // arduino's built-in LED for flashing
   } // if
-  _state = ASSM_STATE_IDLE; // initial STATE is IDLE due to not reacting
+  _state = ASSM_STATE_IDLNG; // initial STATE is IDLE due to not reacting
   _command = ASSM_CMD_NULL; // set COMMAND to NO (NULL) COMMAND
   _helper = new ASSM_HELPER( ); // use internal helper ..
 } // method
@@ -56,10 +56,10 @@ ASSM_HELPER* ASSM::get_ASSM_HELPER( void ) {
 } // method
 
 void ASSM::display( String s ) {
-  String sstate = _helper->state_to_String( _state );
-  const char* cstate = sstate.c_str();
-  String scmmnd = _helper->command_to_String( _command );
-  const char* ccmmnd = scmmnd.c_str();
+  // String sstate = _helper->state_to_String( _state );
+  // const char* cstate = sstate.c_str();
+  // String scmmnd = _helper->command_to_String( _command );
+  // const char* ccmmnd = scmmnd.c_str();
   // you can drive some display here
   // e.g. an liquid crystal 20x2 lcd
 } // method
@@ -74,45 +74,48 @@ void ASSM::ready( ) {
   delay(750); // 500 ms
 } // method
 
-void ASSM::writeData_starting( uint8_t individual_command ) {
-  writeData_starting( _helper->command_to_String( individual_command ) );
-} // method
-
-void ASSM::writeData_starting( String individual_command ) {
-  String str = _helper->mark_as_Data_starting( individual_command );
-  const char* cstr = str.c_str( );
+void ASSM::writeData( String tag, bool data ) {
+  String head = _helper->mark_as_Data_starting( tag );
+  String foot = _helper->mark_as_Data_stopping( tag );
+  String data_str = String(data);
+  String send = head + data_str + foot;
+  const char* cstr = send.c_str( );
   Serial.write( cstr );
 } // method
 
-void ASSM::writeData_stopping( uint8_t individual_command ) {
-  writeData_stopping( _helper->command_to_String( individual_command ) );
-} // method
-
-void ASSM::writeData_stopping( String individual_command ) {
-  String str = _helper->mark_as_Data_stopping( individual_command );
-  const char* cstr = str.c_str( );
+void ASSM::writeData( String tag, int data ) {
+  String head = _helper->mark_as_Data_starting( tag );
+  String foot = _helper->mark_as_Data_stopping( tag );
+  String data_str = String(data);
+  String send = head + data_str + foot;
+  const char* cstr = send.c_str( );
   Serial.write( cstr );
 } // method
 
-void ASSM::writeData( String data ) {
-  const char* cstr = data.c_str( );
+void ASSM::writeData( String tag, float data, int digits, int precision ) {
+  String head = _helper->mark_as_Data_starting( tag );
+  String foot = _helper->mark_as_Data_stopping( tag );
+  String data_str = _helper->toStr( data, digits, precision );
+  String send = head + data_str + foot;
+  const char* cstr = send.c_str( );
   Serial.write( cstr );
 } // method
 
-void ASSM::writeData( float data ) {
-  Serial.print( data, 4 );
+void ASSM::writeData( String tag, double data, int digits, int precision ) {
+  String head = _helper->mark_as_Data_starting( tag );
+  String foot = _helper->mark_as_Data_stopping( tag );
+  String data_str = _helper->toStr( data, digits, precision );
+  String send = head + data_str + foot;
+  const char* cstr = send.c_str( );
+  Serial.write( cstr );
 } // method
 
-void ASSM::writeData( float data, int digits ) {
-  Serial.print( data, digits );
-} // method
-
-void ASSM::writeData( double data ) {
-  Serial.print( data, 4 );
-} // method
-
-void ASSM::writeData( double data, int digits ) {
-  Serial.print( data, digits );
+void ASSM::writeData( String tag, String data ) {
+  String head = _helper->mark_as_Data_starting( tag );
+  String foot = _helper->mark_as_Data_stopping( tag );
+  String send = head + data + foot;
+  const char* cstr = send.c_str( );
+  Serial.write( cstr );
 } // method
 
 void ASSM::writeCommand( uint8_t command ) {
@@ -140,7 +143,6 @@ uint8_t ASSM::readCommand( ) {
   const byte numChars = 32;
   char receivedChars[numChars]; // an array to store the received data
   static byte ndx = 0;
-  static boolean isPreface = false;
   static boolean isReceiving = false;
   char rc;
   uint8_t cmd = ASSM_CMD_NULL;
@@ -206,7 +208,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
     // process the COMMAND PING
     case ASSM_CMD_PING:
       if( _state == ASSM_STATE_ERROR ) {
-        state = ASSM_STATE_IDLE;
+        state = ASSM_STATE_IDLNG;
       } else {
         state = _state; // keep same STATE ..
       }// if
@@ -215,7 +217,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
     // process the COMMAND PONG
     case ASSM_CMD_PONG:
       if( _state == ASSM_STATE_ERROR ) {
-        state = ASSM_STATE_IDLE;
+        state = ASSM_STATE_IDLNG;
       } else {
         state = _state; // keep same STATE ..
       }// if
@@ -255,25 +257,25 @@ uint8_t ASSM::process_command( uint8_t command ) {
     // process the COMMAND STOP; leave some working task and return to IDLE
     case ASSM_CMD_STOP:
       if( _state == ASSM_STATE_MODE1 ) {
-        state = ASSM_STATE_IDLE;
+        state = ASSM_STATE_IDLNG;
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
       } else if( _state == ASSM_STATE_MODE2 ) {
-        state = ASSM_STATE_IDLE;
+        state = ASSM_STATE_IDLNG;
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
       } else if( _state == ASSM_STATE_MODE3 ) {
-        state = ASSM_STATE_IDLE;
+        state = ASSM_STATE_IDLNG;
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
       } else if( _state == ASSM_STATE_MODE4 ) {
-        state = ASSM_STATE_IDLE;
+        state = ASSM_STATE_IDLNG;
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
       } else if( _state == ASSM_STATE_MODE5 ) {
-        state = ASSM_STATE_IDLE;
+        state = ASSM_STATE_IDLNG;
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
       } else if( _state == ASSM_STATE_MODE6 ) {
-        state = ASSM_STATE_IDLE;
+        state = ASSM_STATE_IDLNG;
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
       } else if( _state == ASSM_STATE_MODE7 ) {
-        state = ASSM_STATE_IDLE;
+        state = ASSM_STATE_IDLNG;
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
       } else {
         state = _state; // keep same STATE ..
@@ -283,19 +285,19 @@ uint8_t ASSM::process_command( uint8_t command ) {
     case ASSM_CMD_WAIT:
       state = _state; // keep same STATE ..
     break;
-    // process the COMMAND EVENT; may be do something while processing ..
-    case ASSM_CMD_EVENT:
+    // process the COMMAND EVNT; may be do something while processing ..
+    case ASSM_CMD_EVNT:
       state = _state; // keep same STATE ..
     break;
-    // process the COMMAND STATUS
-    case ASSM_CMD_STATUS:
+    // process the COMMAND STAT
+    case ASSM_CMD_STAT:
       state = _state; // keep same STATE ..
       writeState( _state ); // ALWAYS tell about the current STATE
     break;
 
     // process the COMMAND run MODEs
     // process COMMAND run MODE 1
-    case ASSM_CMD_RNMD1:
+        case ASSM_CMD_RMD1:
       if(_state != ASSM_STATE_ERROR ) {
         state = ASSM_STATE_MODE1; // only if we are not in ERROR ..
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
@@ -305,7 +307,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
     break;
 
     // process COMMAND run MODE 2
-    case ASSM_CMD_RNMD2:
+    case ASSM_CMD_RMD2:
       if(_state != ASSM_STATE_ERROR ) {
         state = ASSM_STATE_MODE2; // only if we are not in ERROR ..
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
@@ -315,7 +317,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
     break;
 
     // process COMMAND run MODE 3
-    case ASSM_CMD_RNMD3:
+    case ASSM_CMD_RMD3:
       if(_state != ASSM_STATE_ERROR ) {
         state = ASSM_STATE_MODE3; // only if we are not in ERROR ..
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
@@ -325,7 +327,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
     break;
 
     // process COMMAND run MODE 4
-    case ASSM_CMD_RNMD4:
+    case ASSM_CMD_RMD4:
       if(_state != ASSM_STATE_ERROR ) {
         state = ASSM_STATE_MODE4; // only if we are not in ERROR ..
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
@@ -335,7 +337,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
     break;
 
     // process COMMAND run MODE 5
-    case ASSM_CMD_RNMD5:
+    case ASSM_CMD_RMD5:
       if(_state != ASSM_STATE_ERROR ) {
         state = ASSM_STATE_MODE5; // only if we are not in ERROR ..
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
@@ -345,7 +347,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
     break;
 
     // process COMMAND run MODE 6
-    case ASSM_CMD_RNMD6:
+    case ASSM_CMD_RMD6:
       if(_state != ASSM_STATE_ERROR ) {
         state = ASSM_STATE_MODE6; // only if we are not in ERROR ..
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
@@ -355,7 +357,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
     break;
 
     // process COMMAND run MODE 7
-    case ASSM_CMD_RNMD7:
+    case ASSM_CMD_RMD7:
       if(_state != ASSM_STATE_ERROR ) {
         state = ASSM_STATE_MODE7; // only if we are not in ERROR ..
         writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
@@ -401,7 +403,7 @@ uint8_t ASSM::process_state( uint8_t state ) {
       next_command = error( _command );
       break;
 
-    case ASSM_STATE_IDLE: // IDLE around, and around, and arountthe world
+    case ASSM_STATE_IDLNG: // IDLE around, and around, and arountthe world
       next_command = ASSM_CMD_NULL;
       if( ASSM_LED_ACTV ) {
         led_heartBeat( 800 ); // 60 bpm heartbeat; 200 blink + 800 wait
@@ -584,9 +586,9 @@ uint8_t ASSM::runMODE7( uint8_t command ) {
   } // if
 
   // if arduino is in runnig state and client sends
-  // EVENT as command, arduino responds with three
+  // EVNT as command, arduino responds with three
   // WAIT commands to simulate a sensor requesting
-  if( command == ASSM_CMD_EVENT ) {
+  if( command == ASSM_CMD_EVNT ) {
     int cnt = 0;
     while( cnt < 3 ) {
       // write a <WAIT> command
@@ -597,9 +599,7 @@ uint8_t ASSM::runMODE7( uint8_t command ) {
     // afterwards arduino responds with an UNIQUE
     // command, writes the data back to the client by:
     // <DATA>1;2;3;4;5;6;7;8;9;0</DATA>
-    writeData_starting( "DATA" );
-    writeData( "1.2;3.4;5.6" );
-    writeData_stopping( "DATA" );
+    writeData( "DATA", "1.2;3.4;5.6" );
     // at the end arduino sends a DONE command
     writeCommand( ASSM_CMD_DONE );
   } // if

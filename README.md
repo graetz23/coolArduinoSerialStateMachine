@@ -15,7 +15,7 @@ For building the HEX file, the [arduino Makefile](https://github.com/sudar/Ardui
 After start up arduino has **nine STATES** available:
 
   - **ERROR** - arduino swtches from _all other states_, turn permanently (predefined) LED 13 on, and processes code of method: [**error()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
-  - **IDLE** - arduino switches from ERROR and _all other_ MODEs, and is idling, does a heartbeat blinking on LED 13, and processes code of method:  [**idle()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
+  - **IDLNG** - arduino switches from ERROR and _all other_ MODEs, and is idling, does a heartbeat blinking on LED 13, and processes code of method:  [**idle()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
   - **MODE1** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE1()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
   - **MODE2** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE2()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
   - **MODE3** - arduino switches from IDLE and _all other_ MODEs, blinks rapidly, and processes code of method: [**runMODE3()**](https://github.com/graetz23/coolArduinoSerialStateMachine/blob/master/coolASSM.cpp),
@@ -85,22 +85,23 @@ For an example, [run_MODE7()](https://github.com/graetz23/coolArduinoSerialState
 
 ### Retrieving data \& individual commands
 
-For retrieving data / content / logs / messages / .. /, you can use the following predefined methods, while extending class ASSM:
+For retrieving data / content / logs / messages / .. /, you can use the following predefined methods on arduino, while extending class ASSM:
 
-  - **writeData_starting( String str )** - let arduino sent: **\<str\>**,  
-  - **writeData( String str )** - let arduino sent: **str**,  
-  - **writeData_stopping( String str )** - let arduino sent: **\<\/str\>**.  
+  - **writeData( String, tag, String data, int digits, int, precision )**
+  - arduino sends: **\<tag\/\>data\<\/tag\>**; ready XML.
 
 For retrieving _individual_ COMMANDs for adapting those on your client side, you can use the following predefiend method:
 
-  - **writeCommand( Str str )** - let arduino sent: **\<str\/\>**.
+  - **writeCommand( Str str )**,
+  - arduino sends: **\<str\/\>**; ready XML.
 
 ### Releases
 
 The following stable **releases** of coolASSM [are available](https://github.com/graetz23/coolArduinoSerialStateMachine/releases):
 
-  - **v1** - **stable**, keeping configurable _DEBUG_DISPLAY_ messages,
-  - **v1.1** - **stable**, cleaned and better _readable_ code; no _DEBUG_DISPLAY_ messages.
+  - **V1.2** - added _defines_ for **analog** \& **digital** pins, optimized COMMANDS, STATEs, and writeData methods.  
+  - **v1.1** - cleaned and better _readable_ code; no _DEBUG_DISPLAY_ messages.
+  - **v1** - keeping configurable _DEBUG_DISPLAY_ messages,
 
 **Try cloning** (git checkout \<SHA\>) or **download** and unzip **from** [**release page**](https://github.com/graetz23/coolArduinoSerialStateMachine/releases).
 
@@ -120,6 +121,27 @@ Everything was coded using:
 have fun :-)
 
 ## ChangeLog
+
+**20200404**
+  - added _defines_ for hardware:
+    - all **analog** pins; are named: **ASSM_HARD_ANLG{0,1,..,5}**:
+      - **IDs** are: **{40,41,..,45}**; doin' leetspeak,
+      - **STRINGs** are: **{A0,A1,..,A5}**; doin' leetspeak,
+    - all **digital** pins; are named: **ASSM_HARD_GPIO{0,1,..,13}**
+    - **IDs** are: **{60,61,..,73}**; doin' leetspeak,
+    - **STRINGs** are: **{GPIO0,GPIO1,..,GPIO13}**; doin' leetspeak,
+- optimzed STATEs - always five letters for STATEs:
+  - **IDLE** is renamed to **IDLNG**
+  - **RNMDx** are renamed to **RMD{0,1,..,7}**
+- optimzed COMMANDs - always less than five lettes:
+  - **EVENT** is renamed to **EVNT**
+  - **STATUS** are renamed to **STAT**
+- optimized **writeData** methods:
+  - available for all data types: **bool**, **int**, **float**, **double**, **String**,
+  - always sending _full_ **XML TAGs** like:
+    - as standard: \<A0\>23.72\<\/A0\>,
+    - as individual: \<DATA\>1.2;3.4;5.6\<\/DATA\>.
+- cleaned and commented code ..
 
 **20200403**
   - extending the README,
