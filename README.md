@@ -54,18 +54,48 @@ Theses COMMANDs are **sent by their ID** to arduino**. However, **arduino will n
   - For single replys, arduino uses _single / empty XML tags_ **<CMD_STR/>**,
   - For **data** replys, arduino may use _XML tags_ **<CMD_STR>data</CMD_STR>**; _optionally_.
 
+The **COMMANDS** for talking to **HARDWARE** are:
+
+  - **<40>** A0 - may be used for analog input reading data,
+  - **<41>** A1 - may be used for analog input reading data,
+  - **<42>** A2 - may be used for analog input reading data,
+  - **<43>** A3 - may be used for analog input reading data,
+  - **<44>** A4 - may be used for analog input reading data,
+  - **<45>** A5 - may be used for analog input reading data.
+
+and for reading digital pins:
+
+- **<60>** GPIO0  - may be used for digital input reading data,
+- **<61>** GPIO1  - may be used for digital input reading data,
+- **<62>** GPIO2  - may be used for digital input reading data,
+- **<63>** GPIO3  - may be used for digital input reading data,
+- **<64>** GPIO4  - may be used for digital input reading data,
+- **<65>** GPIO5  - may be used for digital input reading data,
+- **<66>** GPIO6  - may be used for digital input reading data,
+- **<67>** GPIO7  - may be used for digital input reading data,
+- **<68>** GPIO8  - may be used for digital input reading data,
+- **<69>** GPIO9  - may be used for digital input reading data,
+- **<70>** GPIO10 - may be used for digital input reading data,
+- **<71>** GPIO12 - may be used for digital input reading data,
+- **<72>** GPIO12 - may be used for digital input reading data,
+- **<73>** GPIO13 - may be used for digital input reading data,
+
 All replies of arduino to your _client_ can be directly processed as [XML](https://en.wikipedia.org/wiki/XML); e.g. in [python](https://www.python.org/).
 
 Examples look like:
 
-  - Single / empty XML reply: a sent **<10>** to arduino, will be replied by its state, e.g. **\<IDLE\/\>**, **\<MODE1\/\>**, or **\<MODE2\/\>**
-  - And ; _optional_ Content / data XML replys _may be implemented_ like:
-    - **\<DATA\>** 1.2;3.4;5.6 **\<\/DATA\>**,
-    - **\<INFO\>** sensor A0: is broke **\<\/INFO\>**,
-    - **\<LOG\>** system voltage: 5.783 **\<\/LOG\>**,
-    - **\<MSG\>** 0700 - good morning **\<\/MSG\>**.
+  - Single / empty XML reply: a sent **<10>** to arduino, will be replied by its state, e.g. **\<IDLNG\/\>**, **\<MODE1\/\>**, or **\<MODE2\/\>**
+  - and content / data XML replys _may be implemented_ like:
+    - standard: **\<A0\>** 23.72 **\<\/A0\>**,
+    - standard: **\<GPIO7\>** 1 **\<\/GPIO7\>**,
+    - individual: **\<DATA\>** 1.2;3.4;5.6 **\<\/DATA\>**,
+    - individual: **\<INFO\>** sensor A0: is broke **\<\/INFO\>**,
+    - individual: **\<LOG\>** system voltage: 5.783 **\<\/LOG\>**,
+    - individual: **\<MSG\>** 0700 - good morning **\<\/MSG\>**.
 
 Theses content / data based replies are held _fully independent_; those are not predefined. You can individually implemented such by **extending** the **class ASSM**, **overloading** the **virtual methods** up to _all_ STATEs.
+
+**However, in current version only reading from arduino is available.**
 
 ### Example
 
