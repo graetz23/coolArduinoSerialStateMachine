@@ -106,12 +106,13 @@ For an example, [run_MODE7()](https://github.com/graetz23/coolArduinoSerialState
     - be sure you have the _right port_ and the _correct baudrate_.
   - Type into the serial monitor:
     - **<17>**, to tell arduino to go to STATE: run **MODE7**:
-      - arduino will start processing and reply with an: **<AKNW/>**.
-    - **<7>**, to sent an **EVENT** to arduino:
+      - arduino will start processing and reply with an: **\<AKNW\/\>**.
+    - **<7>**, to sent an **EVNT** (event) to arduino:
       - arduino will reply with an: **\<AKNW\/\>**, and start processing:
         - sents each second for three times a: **\<WAIT\/\>** to you,
         - and afterwards the result: **\<DATA\>** 1.2;3.4;5.6 **\<\/DATA\>**.
-    - **<9>**, to tell arduino to go back to state IDLE and blinks a heartbeat.
+    - **<9>**, to tell arduino to go back to state IDLNG and blinks a heartbeat:
+      - arduino will start processing and reply with an: **\<AKNW\/\>**.
 
 ### Retrieving data \& individual commands
 
