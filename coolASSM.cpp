@@ -288,6 +288,7 @@ uint8_t ASSM::process_command( uint8_t command ) {
     // process the COMMAND EVNT; may be do something while processing ..
     case ASSM_CMD_EVNT:
       state = _state; // keep same STATE ..
+      writeCommand( ASSM_CMD_AKNW ); // answer with a ACKNOWLEDGE
     break;
     // process the COMMAND STAT
     case ASSM_CMD_STAT:
@@ -486,7 +487,7 @@ void ASSM::led_off(  ) {
 
 void ASSM::led_blink( int duration ) {
   if( duration < 10 ) {
-    duration = duration;
+    duration = 10;
   } // if
   led_on( ); // sets the digital pin LED on
   delay( duration );            // waits for a moment in ECU time

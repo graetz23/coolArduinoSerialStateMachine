@@ -124,23 +124,24 @@ have fun :-)
 
 **20200404**
   - added _defines_ for hardware:
-    - all **analog** pins; are named: **ASSM_HARD_ANLG{0,1,..,5}**:
-      - **IDs** are: **{40,41,..,45}**; doin' leetspeak,
-      - **STRINGs** are: **{A0,A1,..,A5}**; doin' leetspeak,
-    - all **digital** pins; are named: **ASSM_HARD_GPIO{0,1,..,13}**
-    - **IDs** are: **{60,61,..,73}**; doin' leetspeak,
-    - **STRINGs** are: **{GPIO0,GPIO1,..,GPIO13}**; doin' leetspeak,
+    - all **analog** pins; are named: **ASSM_HARD_ANLG{ 0, 1, .., 5 }**:
+      - **IDs** are: **{ 40, 41, .., 45 }**; doin' leetspeak,
+      - **STRINGs** are: **{ A0, A1, .., A5 }**; doin' leetspeak,
+    - all **digital** pins; are named: **ASSM_HARD_GPIO{ 0, 1, .., 13 }**
+    - **IDs** are: **{ 60, 61, .., 73 }**; doin' leetspeak,
+    - **STRINGs** are: **{ GPIO0, GPIO1, .., GPIO13 }**; doin' leetspeak,
 - optimzed STATEs - always five letters for STATEs:
   - **IDLE** is renamed to **IDLNG**
-  - **RNMDx** are renamed to **RMD{0,1,..,7}**
+  - **RNMDx** are renamed to **RMD{ 0, 1, .., 7 }**
 - optimzed COMMANDs - always less than five lettes:
   - **EVENT** is renamed to **EVNT**
   - **STATUS** are renamed to **STAT**
 - optimized **writeData** methods:
   - available for all data types: **bool**, **int**, **float**, **double**, **String**,
   - always sending _full_ **XML TAGs** like:
-    - as standard: \<A0\>23.72\<\/A0\>,
-    - as individual: \<DATA\>1.2;3.4;5.6\<\/DATA\>.
+    - as standard: **\<A0\>23.72\<\/A0\>,**
+    - or as standard: **\<GPIO7\>23.72\<\/GPIO7\>,**
+    - as individual: **\<DATA\>1.2;3.4;5.6\<\/DATA\>**.
 - cleaned and commented code ..
 
 **20200403**
