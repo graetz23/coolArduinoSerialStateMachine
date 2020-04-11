@@ -139,7 +139,7 @@ The following stable **releases** of coolASSM [are available](https://github.com
 ### Remarks
 I use this project as a basis for sensor applications; e.g. see: [ASSTCP](https://github.com/graetz23/ArduinoSerialStateTempCableProbe).
 
-On client side I use the _mirrow_ project: [**cool Python Serial State Machine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) to implement the processing of retrieved data / content / logs / messages / .. / from arduino; the project is still ongoing and not stable yet.
+On client side I use the _mirrow_ project: [**cool Python Serial State Machine (coolPSSM)**](https://github.com/graetz23/coolPythonSerialStateMachine) to implement the processing of retrieved data / content / logs / messages / .. / from arduino; the project is still ongoing.
 
 Everything was coded using:
 
