@@ -29,7 +29,7 @@
  * SOFTWARE.
  */
 #include <Arduino.h>
-#include <Servo.h>
+// #include <Servo.h>
 
 #include "./coolASSM.h" // base class header file
 
