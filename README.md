@@ -153,6 +153,9 @@ have fun :-)
 
 ## ChangeLog
 
+**20230518**
+  - updating the copyright by year ..
+
 **20200404**
   - added _defines_ for hardware:
     - all **analog** pins; are named: **ASSM_HARD_ANLG{ 0, 1, .., 5 }**:
